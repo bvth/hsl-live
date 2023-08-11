@@ -1,11 +1,10 @@
 "use client"
 import GtfsRealtimeBindings, { transit_realtime } from "gtfs-realtime-bindings";
-import VehiclePosition = transit_realtime.VehiclePosition;
 import { useEffect, useState } from "react";
 import FeedMessage = transit_realtime.FeedMessage;
 
 
-export default function ServiceAlert() {
+export default function VehiclePositions() {
 	const [vehiclePosition, setVehiclePosition] = useState<FeedMessage>();
 
 	useEffect(() => {
@@ -24,9 +23,9 @@ export default function ServiceAlert() {
 	}
 
 	if(vehiclePosition) {
-		let vehicle = vehiclePosition.entity[0].vehicle;
+		let {vehicle} = vehiclePosition.entity[0];
 		return <div>
-			<span>{vehicle.position?.latitude}</span> - <span>{vehicle.position?.longitude}</span>
+			<p><span>{vehicle.position?.latitude}</span> - <span>{vehicle.position?.longitude}</span></p>
 		</div>
 	}
 	return <h1>Nothing for you, mate!</h1>
