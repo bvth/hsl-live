@@ -2,6 +2,7 @@
 import GtfsRealtimeBindings, { transit_realtime } from "gtfs-realtime-bindings";
 import { useEffect, useState } from "react";
 import FeedMessage = transit_realtime.FeedMessage;
+import IFeedEntity = transit_realtime.IFeedEntity;
 
 
 export default function ServiceAlerts() {
@@ -22,6 +23,20 @@ export default function ServiceAlerts() {
 		}).then(() => {fetchServiceAlerts()})
 	}
 
+	const saveAlert = (body: IFeedEntity) => {
+		let data = {
+			entityId: body.id,
+			headerText_en: body.alert?.headerText?.translation?.find(item => item.language === "en").text,
+			descriptionText_en: body.alert?.descriptionText?.translation?.find(item => item.language === "en").text,
+			start: body.alert?.activePeriod[0].start,
+			end: body.alert?.activePeriod[0].end,
+		}
+		fetch("http://localhost:8000/service-alerts", {
+			method: "POST",
+			body: JSON.stringify(data)
+		}).then(res => {console.log(res)})
+	}
+
 	if(serviceAlerts) {
 		console.log(serviceAlerts.entity)
 		return serviceAlerts.entity.map(entity => {
@@ -31,6 +46,11 @@ export default function ServiceAlerts() {
 				<p>
 					{alert?.descriptionText?.translation?.find(t => t.language === "en")?.text}
 				</p>
+				<button onClick={() => {
+					saveAlert(entity)
+				}}>
+					Save alert
+				</button>
 			</div>
 		})
 	}
