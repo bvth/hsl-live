@@ -38,7 +38,6 @@ export default function ServiceAlerts() {
 	}
 
 	if(serviceAlerts) {
-		console.log(serviceAlerts.entity)
 		return serviceAlerts.entity.map(entity => {
 			let { alert } = entity
 			return <div key={entity.id}>
