@@ -12,7 +12,7 @@ export default function TripUpdates() {
 	}, [])
 
 	const fetchTripUpdates = () => {
-		new Promise ((resolve, reject) => {
+		new Promise<void>((resolve, reject) => {
 			fetch("http://localhost:8000/trip-updates").then(res => res).then(async res => {
 				const buffer = await res.arrayBuffer();
 				let feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
