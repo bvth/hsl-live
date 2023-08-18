@@ -26,8 +26,8 @@ export default function ServiceAlerts() {
 	const saveAlert = (body: IFeedEntity) => {
 		let data = {
 			entityId: body.id,
-			headerText_en: body.alert?.headerText?.translation?.find(item => item.language === "en").text,
-			descriptionText_en: body.alert?.descriptionText?.translation?.find(item => item.language === "en").text,
+			headerText_en: body.alert?.headerText?.translation?.find(item => item.language === "en")?.text,
+			descriptionText_en: body.alert?.descriptionText?.translation?.find(item => item.language === "en")?.text,
 			start: body.alert?.activePeriod[0].start,
 			end: body.alert?.activePeriod[0].end,
 		}
