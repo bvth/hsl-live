@@ -13,7 +13,7 @@ export default function TripUpdates() {
 
 	const fetchTripUpdates = () => {
 		new Promise<void>((resolve, reject) => {
-			fetch("http://localhost:8000/trip-updates").then(res => res).then(async res => {
+			fetch(`${process.env.NEXT_PUBLIC_API_URL}/trip-updates`).then(res => res).then(async res => {
 				const buffer = await res.arrayBuffer();
 				let feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 				setTripUpdates(JSON.parse(JSON.stringify(feed)));

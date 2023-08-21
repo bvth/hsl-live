@@ -20,14 +20,13 @@ export default function Page({params}: {params: {bus: [string]}}) {
 
 	const fetchVehiclePositions = () => {
 		new Promise<void>((resolve, reject) => {
-			fetch("http://localhost:8000/vehicle-positions").then(res => res).then(async res => {
+			fetch(`${process.env.NEXT_PUBLIC_API_URL}/vehicle-positions`).then(res => res).then(async res => {
 				const buffer = await res.arrayBuffer();
 				let feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 				const json_feed = JSON.parse(JSON.stringify(feed));
 				const vehicle = json_feed.entity.find(item => item.vehicle.vehicle.id.split("/")[1] === params.bus[0])?.vehicle;
 				if(vehicle) {
 					setVehiclePosition(vehicle.position);
-					console.log(vehicle)
 					setInterval(() => {
 						resolve();
 					}, 1000);

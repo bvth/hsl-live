@@ -14,7 +14,7 @@ export default function ServiceAlerts() {
 
 	const fetchServiceAlerts = () => {
 		new Promise<void>((resolve, reject) => {
-			fetch("http://localhost:8000/service-alerts").then(res => res).then(async res => {
+			fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-alerts`).then(res => res).then(async res => {
 				const buffer = await res.arrayBuffer();
 				let feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 				setServiceAlerts(JSON.parse(JSON.stringify(feed)));
@@ -31,7 +31,7 @@ export default function ServiceAlerts() {
 			start: body.alert?.activePeriod[0].start,
 			end: body.alert?.activePeriod[0].end,
 		}
-		fetch("http://localhost:8000/service-alerts", {
+		fetch(`${process.env.NEXT_PUBLIC_API_URL}/service-alerts`, {
 			method: "POST",
 			body: JSON.stringify(data)
 		}).then(res => {console.log(res)})
