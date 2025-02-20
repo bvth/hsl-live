@@ -13,6 +13,7 @@ export default function Routes() {
 	const [isLoading, setIsLoading] = useState(false);
 	useEffect(() => {
 		fetchData();
+		
 	}, [routeName, routeType]);
 
 	const fetchData = async () => {
@@ -64,6 +65,9 @@ export default function Routes() {
 	return (
 		<div>
 			<div className="mb-4 p-4 bg-gray-50 rounded">
+				<h1 className="text-2xl font-bold mb-4">
+					HSL Public Transport Routes
+				</h1>
 				<form className="flex gap-4">
 					<div>
 						<label htmlFor="routeName" className="block text-sm font-medium text-gray-700 mb-1">
@@ -122,9 +126,9 @@ export default function Routes() {
 			<div className="overflow-x-auto">
 				<table className="min-w-full table-auto">
 					<colgroup>
-						<col style={{width: "20%"}} />
-						<col style={{width: "60%"}} />
-						<col style={{width: "20%"}} />
+						<col style={{ width: "20%" }} />
+						<col style={{ width: "60%" }} />
+						<col style={{ width: "20%" }} />
 					</colgroup>
 					<thead>
 						<tr className="bg-gray-100">
@@ -140,8 +144,8 @@ export default function Routes() {
 							</tr>
 						) : (
 							routes.map((route, index) => (
-								<tr 
-									key={index} 
+								<tr
+									key={index}
 									className="border-b cursor-pointer hover:bg-gray-100"
 									onClick={() => handleRouteClick(route.gtfsId.replace('HSL:', ''))}
 								>
