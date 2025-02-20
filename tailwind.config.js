@@ -3,6 +3,11 @@ module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    {
+      pattern:/^\w+-\w+(?:-\d{3})?$/,
+    },
+  ],
   theme: {
     extend: {
       backgroundImage: {
