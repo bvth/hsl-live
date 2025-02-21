@@ -1,7 +1,4 @@
-import GtfsRealtimeBindings from "gtfs-realtime-bindings";
-
-
-export default async function Home() {
+export default function Home() {
 	return (
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
@@ -10,6 +7,7 @@ export default async function Home() {
 					<div className="grid gap-4 md:grid-cols-2">
 						<a
 							href="/routes"
+							data-testid="route-browser-link"
 							className="block p-6 bg-blue-50 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors"
 						>
 							<h2 className="text-xl font-semibold text-blue-900 mb-2">Route Browser</h2>
@@ -17,6 +15,7 @@ export default async function Home() {
 						</a>
 						<a
 							href="/itinerary"
+							data-testid="itinerary-planner-link"
 							className="block p-6 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 transition-colors"
 						>
 							<h2 className="text-xl font-semibold text-green-900 mb-2">Itinerary Planner</h2>
