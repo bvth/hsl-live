@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import '../../globals.scss';
 import './routes.scss';
+import Link from 'next/link';
 
 export default function Routes() {
 	const router = useRouter();
@@ -64,6 +65,16 @@ export default function Routes() {
 	return (
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
+				<div className="mb-8">
+					<Link 
+						href="/" 
+						className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+					>
+						<span className="mr-2">←</span>
+						Back to home
+					</Link>
+				</div>
+
 				<div className="mb-8 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
 					<h1 className="text-3xl font-bold text-gray-900 mb-6">
 						HSL Public Transport Routes
