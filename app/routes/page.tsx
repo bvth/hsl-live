@@ -3,9 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import '../../globals.scss';
-import './routes.scss';
 import Link from 'next/link';
-
+import { fetchRoutes } from '@/utils/route';
 export default function Routes() {
 	const router = useRouter();
 	const [routeName, setRouteName] = useState<string>("");
@@ -13,42 +12,19 @@ export default function Routes() {
 	const [routes, setRoutes] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	useEffect(() => {
+		const fetchData = async () => {
+			setIsLoading(true);
+			try {
+				const data = await fetchRoutes(routeName, routeType);
+				setRoutes(data.data.routes);
+			} catch (error) {
+				console.error('Error fetching routes:', error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
 		fetchData();
 	}, [routeName, routeType]);
-
-	const fetchData = async () => {
-		try {
-			setIsLoading(true);
-			const response = await fetch(process.env.NEXT_PUBLIC_DIGITRANSIT_API_URL, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'digitransit-subscription-key': process.env.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY,
-				},
-				body: JSON.stringify({
-					query: `
-						query {
-							routes(name: "${routeName}"${routeType ? `, transportModes: [${routeType}]` : ''}) {
-								gtfsId
-								longName
-								shortName
-								mode
-							}
-						}
-					`
-				}),
-			});
-
-			const data = await response.json();
-			if (data.data?.routes) {
-				setRoutes(data.data.routes);
-			}
-		} catch (error) {
-			console.error('Error fetching data:', error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
 
 	const handleFilterChange = (type: 'name' | 'type', value: string) => {
 		if (type === 'name') {

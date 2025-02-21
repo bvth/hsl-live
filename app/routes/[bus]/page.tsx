@@ -1,44 +1,9 @@
 import '../../../globals.scss';
 import Link from 'next/link';
-
-async function getData(id: string) {
-  const res = await fetch(process.env.NEXT_PUBLIC_DIGITRANSIT_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'digitransit-subscription-key': process.env.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY,
-    },
-    body: JSON.stringify({
-      query: `
-        query {
-          route(id: "HSL:${id}") {
-            longName
-            shortName
-            mode
-            patterns {
-              name
-              stops {
-                name
-                code
-                lat
-                lon
-              }
-            }
-          }
-        }
-      `
-    }),
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch data');
-  }
-
-  return res.json();
-}
+import { fetchOneRoute } from '@/utils/route';
 
 export default async function RoutePage({ params }: { params: { bus: string } }) {
-  const data = await getData(params.bus);
+  const data = await fetchOneRoute((await params).bus);
   const route = data.data.route;
 
   if (!route) {
