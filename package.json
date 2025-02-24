@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "vercel-build": "npm run prepare && next build"
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.26.0",
