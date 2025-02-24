@@ -14,36 +14,36 @@ on:
     branches: [ master ]
 
 jobs:
-  
+
   # Test job: runs tests, linting
   test:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout repository code
-    - uses: actions/checkout@v3
+      # Checkout repository code
+      - uses: actions/checkout@v3
 
-    # Setup Node.js environment
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
+      # Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
 
-    # Install project dependencies
-    - name: Install dependencies
-      run: npm ci
+      # Install project dependencies
+      - name: Install dependencies
+        run: npm ci
 
-    # Run ESLint to check code quality
-    - name: Run linter
-      run: npm run lint
+      # Run ESLint to check code quality
+      - name: Run linter
+        run: npm run lint
 
-    # Run unit tests
-    - name: Run tests
-      run: npm test
+      # Run unit tests
+      - name: Run tests
+        run: npm test
 
-    - name: Build project
-      run: npm run build
+      - name: Build project
+        run: npm run build
 
   # Deploy job: deploys to Vercel if tests pass and we're on main branch
   deploy:
@@ -54,11 +54,26 @@ jobs:
 
     steps:
       # Deploy to Vercel production environment
+      - uses: actions/checkout@v3
+
+      # Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      # Install the latest version of Vercel CLI globally for deployment
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
+
+      # Fetch environment variables and project settings from Vercel
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Build the project using Vercel's build system
       - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Deploy the pre-built artifacts to Vercel's production environment
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
