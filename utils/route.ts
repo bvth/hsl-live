@@ -1,4 +1,4 @@
-import { HSLRoute, SingleRoute } from "../types/routeTypes";
+import { HSLRoute, SingleRoute } from '@/types/routeTypes';
 
 export async function fetchOneRoute(id: string): Promise<{ data: { route: SingleRoute } }> {
     const res = await fetch(process.env.NEXT_PUBLIC_DIGITRANSIT_API_URL, {
