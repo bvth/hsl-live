@@ -5,6 +5,8 @@ name: Production deployment
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY: ${{ secrets.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY }}
+  NEXT_PUBLIC_DIGITRANSIT_API_URL: https://api.digitransit.fi/routing/v2/hsl/gtfs/v1
 
 # Trigger workflow on push to main branch or pull requests to main branch
 on:
