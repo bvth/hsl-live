@@ -9,11 +9,12 @@ env:
 # Trigger workflow on push to main branch or pull requests to main branch
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
+  
   # Test job: runs tests, linting
   test:
     runs-on: ubuntu-latest
@@ -43,9 +44,10 @@ jobs:
 
   # Deploy job: deploys to Vercel if tests pass and we're on main branch
   deploy:
+    environment: Production
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
 
     steps:
       # Deploy to Vercel production environment
