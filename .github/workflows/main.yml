@@ -42,6 +42,9 @@ jobs:
     - name: Run tests
       run: npm test
 
+    - name: Build project
+      run: npm run build
+
   # Deploy job: deploys to Vercel if tests pass and we're on main branch
   deploy:
     environment: Production
