@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import GtfsRealtimeBindings, { transit_realtime } from "gtfs-realtime-bindings";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import IPosition = transit_realtime.IPosition;
@@ -12,7 +12,10 @@ const myIcon = new Icon({
 	iconSize: [32,32]
 })
 
-export default function Page({params}: {params: {bus: [string]}}) {
+type Params = Promise<{ bus: [string] }>
+
+export default function Page({ params} : { params: Params }) {
+	const { bus } = use(params)
 	const [vehiclePosition, setVehiclePosition] = useState<IPosition>();
 	useEffect(() => {
 		fetchVehiclePositions();
@@ -24,7 +27,7 @@ export default function Page({params}: {params: {bus: [string]}}) {
 				const buffer = await res.arrayBuffer();
 				let feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 				const json_feed = JSON.parse(JSON.stringify(feed));
-				const vehicle = json_feed.entity.find(item => item.vehicle.vehicle.id.split("/")[1] === params.bus[0])?.vehicle;
+				const vehicle = json_feed.entity.find(item => item.vehicle.vehicle.id.split("/")[1] === bus[0])?.vehicle;
 				if(vehicle) {
 					setVehiclePosition(vehicle.position);
 					setInterval(() => {
