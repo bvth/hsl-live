@@ -11,7 +11,9 @@ export interface SingleRoute extends HSLRoute {
 
 export interface Pattern {
     name: string;
+    directionId: number;
     stops: Stop[];
+    avgDelay?: number;
 }
 
 export interface Stop {

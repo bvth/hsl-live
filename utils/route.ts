@@ -18,6 +18,7 @@ export async function fetchOneRoute(id: string): Promise<{ data: { route: Single
                         patterns {
                             name
                             code
+                            directionId
                             stops {
                                 name
                                 code
