@@ -64,7 +64,7 @@ export default async function RoutePage({ params } : { params: Params }) {
         <div className="mb-8">
           <Link
               href="/routes"
-              className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+              className="back-button"
           >
             <span className="mr-2">←</span>
             Back to routes
