@@ -42,9 +42,9 @@ export default function Routes() {
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
 				<div className="mb-8">
-					<Link
-						href="/"
-						className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+					<Link 
+						href="/" 
+						className="back-button"
 					>
 						<span className="mr-2">←</span>
 						Back to home

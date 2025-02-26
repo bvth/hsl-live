@@ -25,8 +25,6 @@ export default async function RoutePage({ params } : { params: Params }) {
   const avgAwayDelay = (awayStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0) + returnStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0)) / (awayStops.length + returnStops.length);
   const avgReturnDelay = (awayStops.reduce((acc, stop) => acc + stop.departureDelay, 0) + returnStops.reduce((acc, stop) => acc + stop.departureDelay, 0)) / (awayStops.length + returnStops.length);
 
-  console.log(avgAwayDelay, avgReturnDelay)
-
   const getDelayTime = (directionId: number, index: number) => {
       if(directionId === 1) {
         return `Arrival delay: ${awayStops[index].arrivalDelay}s | Departure delay: ${awayStops[index].departureDelay}s`
