@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import { fetchOneRoute } from '../../../utils/route';
-
+import { Stop, StopTime } from '../../../types/routeTypes';
+import './style.scss';
 type Params = Promise<{ routeId: string }>
 
 export default async function RoutePage({ params } : { params: Params }) {
   const { routeId } = await params
   const data = await fetchOneRoute(routeId);
   const route = data.data.route;
+  const awayStops: StopTime[] = []
+  const returnStops: StopTime[] = []
 
   if (!route) {
     return (
@@ -20,14 +23,48 @@ export default async function RoutePage({ params } : { params: Params }) {
       </div>
     );
   }
+  route.patterns.forEach(pattern => {
+    pattern.stops.forEach(stop => {
+      if (pattern.directionId === 1) {
+        if(stop.away.length !== 2) console.log(stop.name);
+        awayStops.push(stop.away[1]);
+      } else {
+        returnStops.push(stop.return[1]);
+      }
+    });
+  });
+
+  const avgAwayDelay = (awayStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0) ) / awayStops.length;
+  const avgReturnDelay = (returnStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0)) / returnStops.length;
+
+  console.log(avgAwayDelay, avgReturnDelay)
+
+  const getDelayTime = (directionId: number, index: number) => {
+      if(directionId === 1) {
+        return `Arrival delay: ${awayStops[index].arrivalDelay}s | Departure delay: ${awayStops[index].departureDelay}s`
+      } else {
+        return `Arrival delay: ${returnStops[index].arrivalDelay}s | Departure delay:  ${returnStops[index].departureDelay}s`
+      }
+  }
+
+  const getRouteState = (directionId: number) => {
+    const avgDelay = directionId === 1 ? avgAwayDelay : avgReturnDelay;
+    if(avgDelay > 0) {
+      return "Delayed by " + Math.round(Math.abs(avgDelay)) + "s on average"
+    } else if(avgDelay < 0) {
+      return "Early by " + Math.round(Math.abs(avgDelay)) + "s on average"
+    } else {
+      return "On time"
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <Link 
-            href="/routes" 
-            className="back-button"
+          <Link
+              href="/routes"
+              className="back-button"
           >
             <span className="mr-2">←</span>
             Back to routes
@@ -38,7 +75,7 @@ export default async function RoutePage({ params } : { params: Params }) {
           <h1 className="text-3xl font-bold text-gray-900 mb-6">
             Route {route.shortName}: {route.longName}
           </h1>
-          
+
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-3">Route Details</h2>
             <p className="text-gray-600">Type: {route.mode}</p>
@@ -48,7 +85,8 @@ export default async function RoutePage({ params } : { params: Params }) {
             <div className="grid grid-cols-2 gap-4">
               {route.patterns.map((pattern: any, patternIndex: number) => (
                 <div key={patternIndex} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-800 mb-4">{pattern.name}</h3>
+                  <h2 className="text-lg font-medium text-gray-800 mb-4">{pattern.name} ({pattern.stops.length} stops)</h2>
+                  <p>Most likely to be: {getRouteState(pattern.directionId)}</p>
                   <div className="overflow-x-auto">
                     <table>
                       <thead>
@@ -61,10 +99,13 @@ export default async function RoutePage({ params } : { params: Params }) {
                       <tbody className="divide-y divide-gray-200">
                         {pattern.stops.map((stop: any, index: number) => (
                           <tr key={index}>
-                            <td className="text-sm text-gray-900">{stop.name}</td>
+                            <td className="text-sm text-gray-900">
+                                <div>{stop.name}</div>
+                                <div>{getDelayTime(pattern.directionId, index)}</div>
+                            </td>
                             <td className="text-sm text-gray-500">{stop.code}</td>
                             <td className="text-sm">
-                              <a 
+                              <a
                                 href={`https://www.google.com/maps?q=${stop.lat},${stop.lon}`}
                                 target="_blank"
                                 rel="noopener noreferrer"

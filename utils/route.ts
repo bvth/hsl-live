@@ -5,7 +5,7 @@ export async function fetchOneRoute(id: string): Promise<{ data: { route: Single
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'digitransit-subscription-key': process.env.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY,
+            'digitransit-subscription-key': process.env.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY
         },
         body: JSON.stringify({
             query: `
@@ -17,11 +17,39 @@ export async function fetchOneRoute(id: string): Promise<{ data: { route: Single
                         mode
                         patterns {
                             name
+                            code
+                            directionId
                             stops {
                                 name
                                 code
                                 lat
                                 lon
+                                away:stopTimesForPattern(id: "HSL:${id}:1:01") {
+                                    arrivalDelay
+                                    departureDelay
+                                    headsign
+                                    realtime
+                                    realtimeArrival
+                                    realtimeDeparture
+                                    realtimeState
+                                    scheduledArrival
+                                    scheduledDeparture
+                                    serviceDay
+                                    stopPosition
+                                }
+                                return:stopTimesForPattern(id: "HSL:${id}:0:01") {
+                                    arrivalDelay
+                                    departureDelay
+                                    headsign
+                                    realtime
+                                    realtimeArrival
+                                    realtimeDeparture
+                                    realtimeState
+                                    scheduledArrival
+                                    scheduledDeparture
+                                    serviceDay
+                                    stopPosition
+                                }
                             }
                         }
                     }
@@ -42,7 +70,7 @@ export async function fetchRoutes(routeName?: string, routeType?: string): Promi
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'digitransit-subscription-key': process.env.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY,
+            'digitransit-subscription-key': process.env.NEXT_PUBLIC_DIGITRANSIT_SUBSCRIPTION_KEY
         },
         body: JSON.stringify({
             query: `
@@ -55,7 +83,7 @@ export async function fetchRoutes(routeName?: string, routeType?: string): Promi
                     }
                 }
             `
-        }),
+        })
     });
 
     if (!res.ok) {

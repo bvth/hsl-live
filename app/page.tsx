@@ -3,7 +3,7 @@ export default function Home() {
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
 				<div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-					<h1 className="text-3xl font-bold text-gray-900 mb-8">HSL Transit App</h1>
+					<h1 className="text-3xl font-bold text-gray-900 mb-8">HSL Live Transit App</h1>
 					<div className="grid gap-4 md:grid-cols-2">
 						<a
 							href="/routes"
