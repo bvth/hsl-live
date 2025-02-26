@@ -1,14 +1,50 @@
 import Link from 'next/link';
 import { fetchOneRoute } from '../../../utils/route';
-import '../../../globals.scss';
-import { Stop } from '../../../types/routeTypes';
-
+import { Stop, StopTime } from '../../../types/routeTypes';
+import './style.scss';
 type Params = Promise<{ routeId: string }>
 
 export default async function RoutePage({ params } : { params: Params }) {
   const { routeId } = await params
   const data = await fetchOneRoute(routeId);
   const route = data.data.route;
+  const awayStops: StopTime[] = []
+  const returnStops: StopTime[] = []
+
+  route.patterns.forEach(pattern => {
+
+    pattern.stops.forEach(stop => {
+      if (pattern.directionId === 1) {
+        awayStops.push(stop.away[0]);
+      } else {
+        returnStops.push(stop.return[0]);
+      }
+    });
+  });
+
+  const avgAwayDelay = (awayStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0) + returnStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0)) / (awayStops.length + returnStops.length);
+  const avgReturnDelay = (awayStops.reduce((acc, stop) => acc + stop.departureDelay, 0) + returnStops.reduce((acc, stop) => acc + stop.departureDelay, 0)) / (awayStops.length + returnStops.length);
+
+  console.log(avgAwayDelay, avgReturnDelay)
+
+  const getDelayTime = (directionId: number, index: number) => {
+      if(directionId === 1) {
+        return `Arrival delay: ${awayStops[index].arrivalDelay}s | Departure delay: ${awayStops[index].departureDelay}s`
+      } else {
+        return `Arrival delay: ${returnStops[index].arrivalDelay}s | Departure delay:  ${returnStops[index].departureDelay}s`
+      }
+  }
+
+  const getRouteState = (directionId: number) => {
+    const avgDelay = directionId === 1 ? avgAwayDelay : avgReturnDelay;
+    if(avgDelay > 0) {
+      return "Delayed by " + Math.round(Math.abs(avgDelay)) + "s on average"
+    } else if(avgDelay < 0) {
+      return "Early by " + Math.round(Math.abs(avgDelay)) + "s on average"
+    } else {
+      return "On time"
+    }
+  }
 
   if (!route) {
     return (
@@ -50,7 +86,8 @@ export default async function RoutePage({ params } : { params: Params }) {
             <div className="grid grid-cols-2 gap-4">
               {route.patterns.map((pattern: any, patternIndex: number) => (
                 <div key={patternIndex} className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-800 mb-4">{pattern.name}</h3>
+                  <h2 className="text-lg font-medium text-gray-800 mb-4">{pattern.name} ({pattern.stops.length} stops)</h2>
+                  <p>Most likely to be: {getRouteState(pattern.directionId)}</p>
                   <div className="overflow-x-auto">
                     <table>
                       <thead>
@@ -63,7 +100,10 @@ export default async function RoutePage({ params } : { params: Params }) {
                       <tbody className="divide-y divide-gray-200">
                         {pattern.stops.map((stop: any, index: number) => (
                           <tr key={index}>
-                            <td className="text-sm text-gray-900">{stop.name} </td>
+                            <td className="text-sm text-gray-900">
+                                <div>{stop.name}</div>
+                                <div>{getDelayTime(pattern.directionId, index)}</div>
+                            </td>
                             <td className="text-sm text-gray-500">{stop.code}</td>
                             <td className="text-sm">
                               <a
