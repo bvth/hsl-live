@@ -11,19 +11,31 @@ export default async function RoutePage({ params } : { params: Params }) {
   const awayStops: StopTime[] = []
   const returnStops: StopTime[] = []
 
+  if (!route) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Route not found</h1>
+            <p className="text-gray-600">The requested route does not exist.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   route.patterns.forEach(pattern => {
-
     pattern.stops.forEach(stop => {
       if (pattern.directionId === 1) {
-        awayStops.push(stop.away[0]);
+        if(stop.away.length !== 2) console.log(stop.name);
+        awayStops.push(stop.away[1]);
       } else {
-        returnStops.push(stop.return[0]);
+        returnStops.push(stop.return[1]);
       }
     });
   });
 
-  const avgAwayDelay = (awayStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0) + returnStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0)) / (awayStops.length + returnStops.length);
-  const avgReturnDelay = (awayStops.reduce((acc, stop) => acc + stop.departureDelay, 0) + returnStops.reduce((acc, stop) => acc + stop.departureDelay, 0)) / (awayStops.length + returnStops.length);
+  const avgAwayDelay = (awayStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0) ) / awayStops.length;
+  const avgReturnDelay = (returnStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0)) / returnStops.length;
 
   console.log(avgAwayDelay, avgReturnDelay)
 
@@ -44,19 +56,6 @@ export default async function RoutePage({ params } : { params: Params }) {
     } else {
       return "On time"
     }
-  }
-
-  if (!route) {
-    return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Route not found</h1>
-            <p className="text-gray-600">The requested route does not exist.</p>
-          </div>
-        </div>
-      </div>
-    );
   }
 
   return (
