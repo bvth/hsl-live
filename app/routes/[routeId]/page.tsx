@@ -23,6 +23,13 @@ export default async function RoutePage({ params } : { params: Params }) {
       </div>
     );
   }
+
+  /**
+   * Extracts stop times for each pattern and direction
+   * @param route - The route object containing patterns
+   * @param awayStops - Array to store stop times for the 'away' direction, i.e. directionId = 1
+   * @param returnStops - Array to store stop times for the 'return' direction, i.e. directionId = 0
+   */
   route.patterns.forEach(pattern => {
     pattern.stops.forEach(stop => {
       if (pattern.directionId === 1) {
@@ -37,7 +44,12 @@ export default async function RoutePage({ params } : { params: Params }) {
   const avgAwayDelay = (awayStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0) ) / awayStops.length;
   const avgReturnDelay = (returnStops.reduce((acc, stop) => acc + stop.arrivalDelay, 0)) / returnStops.length;
 
-  console.log(avgAwayDelay, avgReturnDelay)
+  /**
+   * Returns the delay time for a specific stop in a given direction
+   * @param directionId - The direction ID (1 for 'away', 0 for 'return')
+   * @param index - The index of the stop in the stops array
+   * @returns String containing the arrival and departure delays for the stop
+   */
 
   const getDelayTime = (directionId: number, index: number) => {
       if(directionId === 1) {
@@ -47,6 +59,11 @@ export default async function RoutePage({ params } : { params: Params }) {
       }
   }
 
+  /**
+   * Returns the average delay state of a route
+   * @param directionId - The direction ID (1 for 'away', 0 for 'return')
+   * @returns String indicating the average delay state
+   */
   const getRouteState = (directionId: number) => {
     const avgDelay = directionId === 1 ? avgAwayDelay : avgReturnDelay;
     if(avgDelay > 0) {

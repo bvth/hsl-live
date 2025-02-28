@@ -4,8 +4,8 @@ A real-time public transport tracking application for Helsinki's HSL network bui
 
 - View all HSL public transport routes
 - Filter routes by type (Bus, Tram, Rail, Subway, Ferry) and route number
-- Track vehicles in real-time on an interactive map
-- See detailed route information
+- Track vehicles in real-time on an interactive map (WIP)
+- See updates, alerts and cancellations for routes (WIP)
 
 Link to the live application: [HSL Live Transit App](https://hsl-live-yv8n.vercel.app/)
 
@@ -72,3 +72,21 @@ https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql
 ## Unit Tests 
 
 Unit tests are located in the `__tests__` directory and are named like `*.test.ts`.
+
+## Approaches
+- Use GraphQL API for fetching route information
+- Use Leaflet for mapping
+- Use GTFS Realtime for vehicle position data
+- Use TailwindCSS for styling
+- Use Jest for testing
+- Diffrent pages for checking route information, updates, alerts, itinerary and live tracking
+
+## Challenges
+- HSL API documentation is not very detailed and takes some time to find the information.
+- Real-time API relies heavily on REST API, I could not find a way to connect to HSL's MQTT websocket service.
+- Lacking of use cases and clarification on the requirements.
+
+## Potential improvements
+- More unit tests
+- Add more tests for the itinerary page, a map for visualizing the route
+- Complete the live tracking and alerts pages

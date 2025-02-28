@@ -11,6 +11,7 @@ export default function Routes() {
 	const [routeType, setRouteType] = useState<string>("");
 	const [routes, setRoutes] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			setIsLoading(true);
@@ -26,6 +27,11 @@ export default function Routes() {
 		fetchData();
 	}, [routeName, routeType]);
 
+	/**
+	 * Handles filter change event by updating the route name or type
+	 * @param type - The type of filter to update ('name' or 'type')
+	 * @param value - The new value for the filter
+	 */
 	const handleFilterChange = (type: 'name' | 'type', value: string) => {
 		if (type === 'name') {
 			setRouteName(value);
@@ -34,6 +40,10 @@ export default function Routes() {
 		}
 	};
 
+	/**
+	 * Handles route click event by pushing the route ID to the router
+	 * @param gtfsId - The GTFS ID of the route
+	 */
 	const handleRouteClick = (gtfsId: string) => {
 		router.push(`/routes/${gtfsId}`);
 	};
