@@ -1,4 +1,4 @@
-# HSL Live Transit App
+# HSL Live
 
 A real-time public transport tracking application for Helsinki's HSL network built with Next.js. This application allows users to:
 
@@ -7,7 +7,7 @@ A real-time public transport tracking application for Helsinki's HSL network bui
 - Track vehicles in real-time on an interactive map (WIP)
 - See updates, alerts and cancellations for routes (WIP)
 
-Link to the live application: [HSL Live Transit App](https://hsl-live-yv8n.vercel.app/)
+Link to the live web application: [HSL Live](https://hsl-live-yv8n.vercel.app/)
 
 ## Technologies Used
 
